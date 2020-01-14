@@ -49,7 +49,7 @@ class BlueVerifyScreen extends StatelessWidget {
           ),
           RaisedButton(
               child: Text('Verify'), onPressed: () => _verify(context)),
-          RaisedButton(child: Text('Verify'), onPressed: () => _login(context)),
+          RaisedButton(child: Text('Login'), onPressed: () => _login(context)),
           RaisedButton(
             color: Colors.grey,
             child: Text(

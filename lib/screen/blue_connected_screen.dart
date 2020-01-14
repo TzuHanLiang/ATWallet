@@ -23,7 +23,7 @@ class BlueConnectedScreen extends StatelessWidget {
       bottomNavigationBar: RaisedButton(
         color: Colors.grey,
         child: Text(
-          'To connect page (test)',
+          'To verify page (test)',
           style: TextStyle(color: Colors.white),
         ),
         onPressed: () => _toBlueVerifyScreen(context),
@@ -39,8 +39,9 @@ class BlueConnectedScreen extends StatelessWidget {
                     .asyncMap((_) => FlutterBlue.instance.connectedDevices),
                 initialData: [],
                 builder: (c, snapshot) => Column(
-                  children: snapshot.data
-                          ?.map(
+                  children: snapshot.data.length != 0
+                      ? snapshot.data
+                          .map(
                             (d) => Container(
                               decoration: BoxDecoration(color: Colors.black),
                               child: ListTile(
@@ -83,8 +84,16 @@ class BlueConnectedScreen extends StatelessWidget {
                               ),
                             ),
                           )
-                          ?.toList() ??
-                      [],
+                          .toList()
+                      : [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              "no connected device..",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )
+                        ],
                 ),
               ),
             ],

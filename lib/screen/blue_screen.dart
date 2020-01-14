@@ -1,64 +1,63 @@
-
 import 'dart:async';
 // import 'dart:math';
 
-import 'package:bip39/bip39.dart';
+// import 'package:bip39/bip39.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import './blue_connected_screen.dart';
-import './blue_verify_screen.dart';
+// import './blue_verify_screen.dart';
 // import '../widgets/blue_widgets.dart';
 
-class BlueScreen extends StatelessWidget {
-  static const routeName = '/blue-screen';
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      color: Colors.lightBlue,
-      home: StreamBuilder<BluetoothState>(
-          stream: FlutterBlue.instance.state,
-          initialData: BluetoothState.unknown,
-          builder: (c, snapshot) {
-            final state = snapshot.data;
-            if (state == BluetoothState.on) {
-              return FindDevicesScreen();
-            }
-            return BluetoothOffScreen(state: state);
-          }),
-    );
-  }
-}
+// class BlueScreen extends StatelessWidget {
+//   static const routeName = '/blue-screen';
+//   @overridea
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       color: Colors.lightBlue,
+//       home: StreamBuilder<BluetoothState>(
+//           stream: FlutterBlue.instance.state,
+//           initialData: BluetoothState.unknown,
+//           builder: (c, snapshot) {
+//             final state = snapshot.data;
+//             if (state == BluetoothState.on) {
+//               return FindDevicesScreen();
+//             }
+//             return BluetoothOffScreen(state: state);
+//           }),
+//     );
+//   }
+// }
 
-class BluetoothOffScreen extends StatelessWidget {
-  const BluetoothOffScreen({Key key, this.state}) : super(key: key);
-  final BluetoothState state;
+// class BluetoothOffScreen extends StatelessWidget {
+//   const BluetoothOffScreen({Key key, this.state}) : super(key: key);
+//   final BluetoothState state;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blue,
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(
-              Icons.bluetooth_disabled,
-              size: 200.0,
-              color: Colors.white54,
-            ),
-            Text(
-              'Bluetooth Adapter is ${state.toString()}.',
-              style: Theme.of(context)
-                  .primaryTextTheme
-                  .subhead
-                  .copyWith(color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.blue,
+//       body: Center(
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: <Widget>[
+//             Icon(
+//               Icons.bluetooth_disabled,
+//               size: 200.0,
+//               color: Colors.white54,
+//             ),
+//             Text(
+//               'Bluetooth Adapter is ${state.toString()}.',
+//               style: Theme.of(context)
+//                   .primaryTextTheme
+//                   .subhead
+//                   .copyWith(color: Colors.white),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class FindDevicesScreen extends StatelessWidget {
   static const routeName = '/find-devices';
@@ -66,11 +65,11 @@ class FindDevicesScreen extends StatelessWidget {
   List<ScanResult> atDevices;
   List<BluetoothDevice> connectedAtDevices = [];
 
-  void _toBlueVerifyScreen(BuildContext context) {
-    Navigator.of(context).pushNamed(
-      BlueVerifyScreen.routeName,
-    );
-  }
+  // void _toBlueVerifyScreen(BuildContext context) {
+  //   Navigator.of(context).pushNamed(
+  //     BlueVerifyScreen.routeName,
+  //   );
+  // }
 
   void _toBlueConnectedScreen(BuildContext context) {
     Navigator.of(context).pushNamed(
@@ -79,21 +78,19 @@ class FindDevicesScreen extends StatelessWidget {
   }
 
   void _connect(BuildContext context, int idx) {
-    // print('Pressed');
     atDevices[idx].device.connect();
     Navigator.of(context).pushNamed(
-      BlueConnectedScreen.routeName,);
+      BlueConnectedScreen.routeName,
+    );
   }
 
   List<ScanResult> getDiscoveredDevices() {
     return this.atDevices;
   }
 
-  List<BluetoothDevice> getPairedDevices() {
-    return this.connectedAtDevices;
-  }
-
-
+  // List<BluetoothDevice> getPairedDevices() {
+  //   return this.connectedAtDevices;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +114,6 @@ class FindDevicesScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              
               // StreamBuilder<List<BluetoothDevice>>(
               //   stream: Stream.periodic(Duration(seconds: 2))
               //       .asyncMap((_) => FlutterBlue.instance.connectedDevices),
@@ -221,7 +217,26 @@ class FindDevicesScreen extends StatelessWidget {
                         ),
                       );
                     } else {
-                      return Text('Connecting');
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: StreamBuilder<bool>(
+                          stream: FlutterBlue.instance.isScanning,
+                          initialData: false,
+                          builder: (c, snapshot) {
+                            if (snapshot.data) {
+                              return Text(
+                                "Searching...",
+                                style: TextStyle(color: Colors.white),
+                              );
+                            } else {
+                              return Text(
+                                "no device nearby..",
+                                style: TextStyle(color: Colors.white),
+                              );
+                            }
+                          },
+                        ),
+                      );
                     }
                   }
 
